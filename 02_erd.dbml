@@ -1,0 +1,67 @@
+
+// Chess DB (Top Players / GCT)
+
+Table Player {
+  PlayerID integer [pk, increment]
+  FullName varchar(100) [not null]
+  Country  varchar(3)   [note: 'ISO-3166 Alpha-3 where possible']
+  BirthYear integer
+  FIDEID   varchar(20) [unique]
+  Title    varchar(5)  [note: 'GM, IM, FM, etc.']
+  PeakRating integer
+  PeakRatingDate date
+}
+
+Table Tournament {
+  TournamentID integer [pk, increment]
+  Name        varchar(120) [not null]
+  Location    varchar(120)
+  StartDate   date
+  EndDate     date
+  Organizer   varchar(120)
+  Category    varchar(20)  [note: 'Classical/Rapid/Blitz/Mixed']
+}
+
+Table Participation {
+  ParticipationID integer [pk, increment]
+  PlayerID    integer [not null, ref: > Player.PlayerID]
+  TournamentID integer [not null, ref: > Tournament.TournamentID]
+  FinalRank   integer
+  Points      decimal(5,2)
+  AvgOpponentRating integer
+  PerformanceRating integer
+  Indexes {
+    (PlayerID)
+    (TournamentID)
+    (PlayerID, TournamentID) [unique]
+  }
+}
+
+Table Game {
+  GameID integer [pk, increment]
+  TournamentID integer [not null, ref: > Tournament.TournamentID]
+  RoundNumber integer
+  WhitePlayerID integer [not null, ref: > Player.PlayerID]
+  BlackPlayerID integer [not null, ref: > Player.PlayerID]
+  Result varchar(7) [note: '1-0, 0-1, 1/2-1/2']
+  ECOCode varchar(5)
+  OpeningName varchar(120)
+  MovesCount integer
+  Indexes {
+    (TournamentID)
+    (WhitePlayerID)
+    (BlackPlayerID)
+  }
+}
+
+Table RatingHistory {
+  RatingID integer [pk, increment]
+  PlayerID integer [not null, ref: > Player.PlayerID]
+  Date     date     [not null]
+  ClassicalRating integer
+  RapidRating integer
+  BlitzRating integer
+  Indexes {
+    (PlayerID, Date) [unique]
+  }
+}
