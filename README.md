@@ -25,5 +25,10 @@ The goal of this project is to practice:
 ## How to Use
 1. Download or clone this repository.
 2. Open the project folder.
-3. Run the program to browse the database contents.
+3. Run the program to browse the database contents - python3 05_cli.py
 4. Use the menu options to explore players, tournaments, and results.
+   - list players
+   - list tournaments
+   - standings <Tournament Name>
+   - quit
+
